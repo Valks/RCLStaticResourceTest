@@ -15,10 +15,16 @@ variables:
 
 steps:
 # Setup dotnet core version
-    - task: UseDotNet@2
+#    - task: UseDotNet@2
+#      inputs:
+#        version: '$(net6)'
+#        includePreviewVersions: true
+        
+    - task: Bash@3
       inputs:
-        version: '$(net6)'
-        includePreviewVersions: true
+        targetType: 'inline'
+        script: |
+        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0.1xx --quality daily
 
     # NuGet
     - task: DotNetCoreCLI@2
