@@ -41,7 +41,7 @@ steps:
     - task: CopyFiles@2
       displayName: 'Export binlog'
       inputs:
-        contents: 'RCLStaticResourceTest/msbuild.binlog'
+        contents: '$(Build.Repository.LocalPath)/RCLStaticResourceTest/msbuild.binlog'
         targetFolder: '$(Build.ArtifactStagingDirectory)/Packages/'
       
     - task: DotNetCoreCLI@2
