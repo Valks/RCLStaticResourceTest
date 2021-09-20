@@ -24,46 +24,62 @@ steps:
       inputs:
         targetType: 'inline'
         script: curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0.1xx --quality daily
+        
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: dotnet restore /home/vsts/work/1/s/RCLStaticResourceTest/RCLStaticResourceTest.csproj --configuration $(BuildConfiguration)
+        
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: dotnet build /home/vsts/work/1/s/RCLStaticResourceTest/RCLStaticResourceTest.csproj --configuration $(BuildConfiguration) --no-restore --verbosity Detailed /bl:"$(Build.SourcesDirectory)/BuildLog/build.binlog"
 
-    # NuGet
-    - task: DotNetCoreCLI@2
-      displayName: 'Restore Packages'
-      inputs:
-        command: 'restore'
-        projects: |
-          RCLStaticResourceTest/RCLStaticResourceTest.csproj
-          
-    - task: DotNetCoreCLI@2
-      displayName: 'Build'
-      inputs:
-       command: 'build'
-       configuration: $(BuildConfiguration)
-       projects: |
-         RCLStaticResourceTest/RCLStaticResourceTest.csproj
-       arguments: |
-         --configuration $(BuildConfiguration) --no-restore /bl:"$(Build.SourcesDirectory)/BuildLog/build.binlog"
-         
     - task: PublishPipelineArtifact@1  
       displayName: Publish BinLog  
       inputs:  
         path: $(Build.SourcesDirectory)/BuildLog
-        artifact: BuildLog  
+        artifact: BuildLog
+        
+#    # NuGet
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Restore Packages'
+#      inputs:
+#        command: 'restore'
+#        projects: |
+#          RCLStaticResourceTest/RCLStaticResourceTest.csproj
+          
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Build'
+#      inputs:
+#       command: 'build'
+#       configuration: $(BuildConfiguration)
+#       projects: |
+#         RCLStaticResourceTest/RCLStaticResourceTest.csproj
+#       arguments: |
+#         --configuration $(BuildConfiguration) --no-restore /bl:"$(Build.SourcesDirectory)/BuildLog/build.binlog"
+         
+#    - task: PublishPipelineArtifact@1  
+#      displayName: Publish BinLog  
+#      inputs:  
+#        path: $(Build.SourcesDirectory)/BuildLog
+#        artifact: BuildLog
       
-    - task: DotNetCoreCLI@2
-      displayName: 'Pack'
-      inputs:
-       command: 'pack'
-       configuration: $(BuildConfiguration)
-       nobuild: true
-       includesymbols: true
-       includesource: false
-       outputDir: '$(Build.ArtifactStagingDirectory)/Packages'
-       packagesToPack: |
-         RCLStaticResourceTest/RCLStaticResourceTest.csproj
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack'
+#      inputs:
+#       command: 'pack'
+#       configuration: $(BuildConfiguration)
+#       nobuild: true
+#       includesymbols: true
+#       includesource: false
+#       outputDir: '$(Build.ArtifactStagingDirectory)/Packages'
+#       packagesToPack: |
+#         RCLStaticResourceTest/RCLStaticResourceTest.csproj
 
-    # Publish prepared source artifact.
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish Artifacts'
-      inputs:
-        TargetPath: '$(Build.ArtifactStagingDirectory)/Packages/'
-        artifactName: RCLStaticResourceTest
+#    # Publish prepared source artifact.
+#    - task: PublishPipelineArtifact@1
+#      displayName: 'Publish Artifacts'
+#      inputs:
+#        TargetPath: '$(Build.ArtifactStagingDirectory)/Packages/'
+#        artifactName: RCLStaticResourceTest
