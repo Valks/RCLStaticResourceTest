@@ -36,8 +36,14 @@ steps:
        projects: |
          RCLStaticResourceTest/RCLStaticResourceTest.csproj
        arguments: |
-         --configuration $(BuildConfiguration) --no-restore
+         --configuration $(BuildConfiguration) --no-restore /bl
          
+    - task: CopyFiles@2
+      displayName: 'Export binlog'
+      inputs:
+        contents: 'RCLStaticResourceTest/msbuild.binlog'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/Packages/'
+      
     - task: DotNetCoreCLI@2
       displayName: 'Pack'
       inputs:
