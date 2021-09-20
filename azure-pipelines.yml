@@ -23,8 +23,7 @@ steps:
     - task: Bash@3
       inputs:
         targetType: 'inline'
-        script: |
-        curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0.1xx --quality daily
+        script: curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 6.0.1xx --quality daily
 
     # NuGet
     - task: DotNetCoreCLI@2
