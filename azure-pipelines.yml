@@ -28,12 +28,12 @@ steps:
     - task: Bash@3
       inputs:
         targetType: 'inline'
-        script: dotnet restore /home/vsts/work/1/s/RCLStaticResourceTest/RCLStaticResourceTest.csproj
+        script: /home/vsts/.dotnet restore /home/vsts/work/1/s/RCLStaticResourceTest/RCLStaticResourceTest.csproj --configuration Release
         
     - task: Bash@3
       inputs:
         targetType: 'inline'
-        script: dotnet build /home/vsts/work/1/s/RCLStaticResourceTest/RCLStaticResourceTest.csproj --configuration $(BuildConfiguration) --no-restore --verbosity Detailed /bl:"$(Build.SourcesDirectory)/BuildLog/build.binlog"
+        script: /home/vsts/.dotnet build /home/vsts/work/1/s/RCLStaticResourceTest/RCLStaticResourceTest.csproj --configuration $(BuildConfiguration) --no-restore --verbosity Detailed /bl:"$(Build.SourcesDirectory)/BuildLog/build.binlog"
 
     - task: PublishPipelineArtifact@1  
       displayName: Publish BinLog  
